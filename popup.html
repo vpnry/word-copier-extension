@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Copier Extension</title>
+    <title>Word Copier</title>
     <script src="popup.js" defer></script>
     <style>
         body {
@@ -25,6 +25,12 @@
 <body>
     <h1>Word Copier</h1>
     <p>Click on any word to copy it!</p>
+    <div>
+        <label>
+            <input type="checkbox" id="double-click-mode"> Use double-click mode
+        </label>
+    </div>
+    <!-- <button id="copy-button">Copy</button> -->
     <div id="message"></div>
 </body>
 </html>

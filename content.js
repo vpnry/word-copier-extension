@@ -1,4 +1,6 @@
-document.addEventListener("click", function (event) {
+let currentListener = null;
+
+function handleWordCopy(event) {
   // Get the clicked element and its text content
   const clickedElement = event.target;
   const text = clickedElement.textContent;
@@ -49,5 +51,31 @@ document.addEventListener("click", function (event) {
         })
         .catch((err) => console.error("Word Copier Extension: could not copy text: ", err));
     }
+  }
+}
+
+function setupListener(isDoubleClick) {
+  // Remove existing listener if any
+  if (currentListener) {
+    document.removeEventListener("click", currentListener);
+    document.removeEventListener("dblclick", currentListener);
+  }
+
+  // Add new listener based on mode
+  const eventType = isDoubleClick ? "dblclick" : "click";
+  document.addEventListener(eventType, handleWordCopy);
+  currentListener = handleWordCopy;
+}
+
+// Initial setup
+chrome.storage.sync.get(["doubleClickMode"], (result) => {
+  setupListener(result.doubleClickMode || false);
+});
+
+// Listen for preference changes
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "updateClickMode") {
+    setupListener(request.isDoubleClick);
+    sendResponse({ status: "success" });
   }
 });
